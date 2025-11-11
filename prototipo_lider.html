@@ -313,12 +313,24 @@
 
                     <div>
                         <h3 class="text-xl font-bold text-gray-800 mb-4">Minhas Habilidades e Funções</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">Scrum Master</span>
-                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">Gestão de Projetos</span>
-                            <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">JavaScript</span>
-                            <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">Design Thinking</span>
+                        <!-- HABILIDADES SCRUM (AGORA EDITÁVEL) -->
+                        <div id="scrum-skills-list" class="flex flex-wrap gap-2 mb-4">
+                            <!-- Skills injetadas -->
                         </div>
+                        <form onsubmit="event.preventDefault(); addSkill('scrum')" class="flex gap-4 mb-6">
+                            <input type="text" id="new-scrum-skill" placeholder="Adicionar experiência Scrum" class="flex-1 p-3 border border-gray-300 rounded-lg">
+                            <button type="submit" class="bg-superagil-blue text-white font-medium py-3 px-5 rounded-lg hover:bg-opacity-90">Adicionar</button>
+                        </form>
+
+                        <!-- HABILIDADES TÉCNICAS (AGORA EDITÁVEL) -->
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Habilidades Técnicas</h3>
+                        <div id="tech-skills-list" class="flex flex-wrap gap-2 mb-4">
+                           <!-- Skills injetadas -->
+                        </div>
+                         <form onsubmit="event.preventDefault(); addSkill('tech')" class="flex gap-4">
+                            <input type="text" id="new-tech-skill" placeholder="Adicionar habilidade técnica" class="flex-1 p-3 border border-gray-300 rounded-lg">
+                            <button type="submit" class="bg-superagil-blue text-white font-medium py-3 px-5 rounded-lg hover:bg-opacity-90">Adicionar</button>
+                        </form>
                     </div>
 
                     <hr class="my-8">
@@ -330,6 +342,14 @@
                             <li class="text-gray-700">Iniciativa Gen AI</li>
                         </ul>
                     </div>
+
+                    <!-- BOTÃO SALVAR -->
+                    <div class="mt-10 text-right">
+                        <button onclick="alert('Perfil Salvo! (simulação)')" class="bg-superagil-orange text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-opacity-90 transition-all">
+                            Salvar Alterações
+                        </button>
+                    </div>
+
                 </div>
             </div>
             
@@ -462,7 +482,15 @@
                 nome: 'Carlos Mendes',
                 email: 'carlos.mendes@superagil.com',
                 funcao: 'Product Owner',
-                // ... mais dados
+                // DADOS ADICIONADOS
+                scrumSkills: [
+                    { nome: 'Product Owner', principal: true },
+                    { nome: 'Gestão de Projetos', principal: false },
+                ],
+                techSkills: [
+                    { nome: 'JavaScript', principal: false },
+                    { nome: 'Design Thinking', principal: false },
+                ]
             },
             // DADOS MOCKADOS (NOVOS)
             mockPOs: [
@@ -502,7 +530,8 @@
                 renderDetalheProjeto(data);
             }
             if (viewId === 'perfil') {
-                // Aqui você pode carregar dados do perfil, se necessário
+                // AGORA CHAMA A FUNÇÃO
+                renderPerfil();
             }
             // NOVO RENDER
             if (viewId === 'gerenciar-po') {
@@ -718,6 +747,61 @@
                 poList.innerHTML = '<p class="text-gray-500 text-center">Nenhum PO externo cadastrado.</p>';
             }
         }
+
+        // 
+        // =============================================================
+        // FUNÇÕES DE EDIÇÃO DE PERFIL (ADICIONADAS)
+        // =============================================================
+        // 
+
+        // Renderiza o Perfil Editável (Req 2.3)
+        function renderPerfil() {
+            // Renderiza Habilidades Scrum
+            const scrumList = document.getElementById('scrum-skills-list');
+            scrumList.innerHTML = '';
+            mockData.perfil.scrumSkills.forEach(skill => {
+                scrumList.innerHTML += `
+                    <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1.5 rounded-full flex items-center">
+                        ${skill.nome}
+                        ${skill.principal ? '<span class="ml-2 text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Principal</span>' : ''}
+                        <button class="ml-2 text-blue-600 hover:text-blue-800">&times;</button>
+                    </span>
+                `;
+            });
+
+            // Renderiza Habilidades Técnicas
+            const techList = document.getElementById('tech-skills-list');
+            techList.innerHTML = '';
+            mockData.perfil.techSkills.forEach(skill => {
+                techList.innerHTML += `
+                    <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1.5 rounded-full flex items-center">
+                        ${skill.nome}
+                        ${skill.principal ? '<span class="ml-2 text-xs bg-gray-600 text-white px-2 py-0.5 rounded-full">Principal</span>' : ''}
+                        <button class="ml-2 text-gray-600 hover:text-gray-800">&times;</button>
+                    </span>
+                `;
+            });
+        }
+
+        // Adiciona uma nova skill (simulação)
+        function addSkill(type) {
+            if (type === 'scrum') {
+                const input = document.getElementById('new-scrum-skill');
+                if (input.value) {
+                    mockData.perfil.scrumSkills.push({ nome: input.value, principal: false });
+                    input.value = '';
+                    renderPerfil(); // Re-renderiza a lista
+                }
+            } else if (type === 'tech') {
+                const input = document.getElementById('new-tech-skill');
+                 if (input.value) {
+                    mockData.perfil.techSkills.push({ nome: input.value, principal: false });
+                    input.value = '';
+                    renderPerfil(); // Re-renderiza a lista
+                }
+            }
+        }
+
     </script>
 
 </body>
