@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperÁgil - App PO Externo</title>
+    <!-- Carrega o Tailwind CSS para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fonte Inter (padrão do Tailwind) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Classe auxiliar para esconder/mostrar telas */
+        .hidden {
+            display: none;
+        }
+        /* Cores personalizadas do SuperÁgil (baseado no logo) */
+        .bg-superagil-orange { background-color: #f97316; } /* orange-600 */
+        .text-superagil-orange { color: #f97316; }
+        .border-superagil-orange { border-color: #f97316; }
+        .bg-superagil-blue { background-color: #1e40af; } /* blue-800 */
+        .text-superagil-blue { color: #1e40af; }
+
+        /* Efeito de curva do login */
+        .login-bg-orange {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background-color: #f97316; /* Laranja */
+            z-index: 0;
+        }
+        .login-bg-blue {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #1e40af; /* Azul */
+            clip-path: ellipse(120% 60% at 50% 0%);
+            z-index: 1;
+        }
+        .login-content {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- 
+      ==================================================================
+      TELA DE LOGIN (View 1)
+      ==================================================================
+    -->
+    <div id="login-view" class="relative min-h-screen overflow-hidden">
+        <!-- Fundos curvados -->
+        <div class="login-bg-orange"></div>
+        <div class="login-bg-blue"></div>
+        
+        <!-- Conteúdo do Login -->
+        <div class="login-content min-h-screen flex flex-col items-center justify-center p-4">
+            
+            <h1 class="text-6xl font-bold text-white mb-12">SuperÁgil</h1>
+
+            <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Login (PO Externo)</h2>
+                
+                <form onsubmit="event.preventDefault(); login()">
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-600 mb-2">E-mail</label>
+                        <input type="email" id="email" value="joao.po@cliente.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-superagil-orange" placeholder="seuemail@gmail.com" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-600 mb-2">Senha</label>
+                        <input type="password" id="password" value="123456" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-superagil-orange" placeholder="**************" required>
+                    </div>
+
+                    <!-- CAPTCHA Visual (Não-Funcional) -->
+                    <div class="bg-gray-100 border border-gray-300 rounded-lg p-3 flex items-center justify-between my-6">
+                        <div class="flex items-center">
+                            <input type="checkbox" checked class="h-6 w-6 rounded border-gray-400">
+                            <span class="ml-3 text-sm text-gray-700">Eu não sou um robô</span>
+                        </div>
+                        <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" class="h-8">
+                    </div>
+
+                    <button type="submit" class="w-full bg-superagil-orange text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-opacity-90 transition-all duration-300">
+                        Entrar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+      ==================================================================
+      APP PO EXTERNO (View 2)
+      Container principal do app pós-login
+      ==================================================================
+    -->
+    <div id="app-view" class="hidden min-h-screen bg-gray-100">
+        
+        <!-- HEADER (Cabeçalho Simplificado) -->
+        <header class="bg-superagil-blue text-white shadow-lg sticky top-0 z-50">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold">SuperÁgil (Visão PO Externo)</h1>
+                <nav>
+                    <button onclick="logout()" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <span class="font-medium hidden md:block">Sair</span>
+                        <!-- Ícone de Sair (SVG Inline) -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Área de Conteúdo Principal -->
+        <main id="main-content" class="container mx-auto p-4 md:p-8">
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: DASHBOARD RESTRITO (Tela 2a)
+              (Requisito 1.2)
+              ----------------------------------------------------
+            -->
+            <div id="dashboard-content" class="app-content">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800">Meu Projeto Atribuído</h2>
+                    <p class="text-gray-600">Olá, João Silva. Esta é a sua visão restrita do projeto ao qual você foi atribuído.</p>
+                </div>
+
+                <!-- Lista de Projetos (Apenas o atribuído) -->
+                <div id="project-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Projeto será injetado aqui pelo JavaScript -->
+                </div>
+            </div>
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: DETALHE DO PROJETO (VISUALIZAÇÃO) (Tela 2b)
+              (Requisito 1.2)
+              ----------------------------------------------------
+            -->
+            <div id="detalhe-projeto-content" class="app-content hidden">
+                <button onclick="showView('dashboard')" class="text-superagil-orange font-medium mb-4 flex items-center space-x-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span>Voltar ao Dashboard</span>
+                </button>
+
+                <!-- Cabeçalho do Projeto -->
+                <div class="bg-white p-6 rounded-2xl shadow-xl mb-8">
+                    <h2 id="detalhe-proj-nome" class="text-3xl font-bold text-gray-800"></h2>
+                    <p id="detalhe-proj-desc" class="text-gray-600 mt-2"></p>
+                </div>
+
+                <!-- Lista de Equipes (Sem Edição) -->
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Equipes do Projeto</h3>
+                <div id="detalhe-equipes-lista" class="space-y-6">
+                    <!-- Equipes serão injetadas aqui -->
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- 
+      ==================================================================
+      SCRIPT DE INTERATIVIDADE (JavaScript)
+      ==================================================================
+    -->
+    <script>
+        // Dados Mockados (Simulando um banco de dados RESTRITO para o PO)
+        const mockDataPO = {
+            projeto: {
+                id: 'xyz',
+                nome: 'Projeto Super Vendas (XYZ)',
+                descricao: 'Uma nova plataforma de vendas B2B para revolucionar o mercado.',
+                habilidades: ['Prog. Front-end', 'Back-end', 'UX/UI Designer'],
+                totalEquipes: 2,
+                totalIntegrantes: 10,
+                equipes: [
+                    { 
+                        nome: 'Equipe Alfa (Frontend)', 
+                        membros: ['Ana', 'Bruno', 'Carla', 'Daniel', 'Elias'] 
+                    },
+                    { 
+                        nome: 'Equipe Beta (Backend)', 
+                        membros: ['Fernanda', 'Gustavo', 'Helena', 'Igor', 'Julia'] 
+                    },
+                ]
+            }
+            // Note que não há outros projetos, perfil, etc.
+        };
+
+        // Função de Login
+        function login() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('app-view').classList.remove('hidden');
+            showView('dashboard');
+        }
+
+        // Função de Logout
+        function logout() {
+            document.getElementById('app-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            // Limpa o email e senha para a simulação
+            document.getElementById('email').value = "joao.po@cliente.com";
+            document.getElementById('password').value = "123456";
+        }
+
+        // Função central de navegação
+        function showView(viewId, data = null) {
+            // Esconde todas as "telas" de conteúdo
+            document.querySelectorAll('.app-content').forEach(el => el.classList.add('hidden'));
+
+            // Mostra a tela solicitada
+            const viewElement = document.getElementById(`${viewId}-content`);
+            if (viewElement) {
+                viewElement.classList.remove('hidden');
+            } else {
+                console.error(`View "${viewId}-content" não encontrada!`);
+                document.getElementById('dashboard-content').classList.remove('hidden'); // Volta pro dashboard
+            }
+
+            // Scroll para o topo
+            window.scrollTo(0, 0);
+
+            // Se for uma view que precisa de dados, renderiza
+            if (viewId === 'dashboard') {
+                renderDashboardPO();
+            }
+            if (viewId === 'detalhe-projeto') {
+                renderDetalheProjetoPO();
+            }
+        }
+
+        // Renderiza o Dashboard (Visão Restrita PO)
+        function renderDashboardPO() {
+            const projectList = document.getElementById('project-list');
+            projectList.innerHTML = ''; // Limpa a lista
+            const proj = mockDataPO.projeto;
+
+            const card = `
+                <div class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-xl font-bold text-superagil-blue">${proj.nome}</h3>
+                    <p class="text-gray-600 text-sm h-10 my-2">${proj.descricao.substring(0, 70)}...</p>
+                    
+                    <div class="my-4">
+                        <span class="text-xs font-medium text-gray-700">Habilidades:</span>
+                        <div class="flex flex-wrap gap-2 mt-1">
+                            ${proj.habilidades.map(hab => `<span class="bg-gray-100 text-gray-700 text-xs font-medium px-2 py-1 rounded-full">${hab}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-sm font-medium text-gray-700 border-t pt-4 mt-4">
+                        <span>${proj.totalEquipes} Equipes</span>
+                        <span>${proj.totalIntegrantes} Integrantes</span>
+                    </div>
+
+                    <button onclick="showView('detalhe-projeto')" class="w-full mt-4 bg-white border border-superagil-orange text-superagil-orange font-bold py-2 px-4 rounded-lg hover:bg-superagil-orange hover:text-white transition-all">
+                        Visualizar Equipes
+                    </button>
+                </div>
+            `;
+            // Adiciona um card vazio para manter o layout, se houver apenas 1 projeto
+            projectList.innerHTML += card;
+            projectList.innerHTML += '<div class="hidden md:block"></div>'; 
+        }
+
+        // Renderiza o Detalhe do Projeto (Visão Restrita PO)
+        function renderDetalheProjetoPO() {
+            const projeto = mockDataPO.projeto;
+
+            // Preenche cabeçalho
+            document.getElementById('detalhe-proj-nome').textContent = projeto.nome;
+            document.getElementById('detalhe-proj-desc').textContent = projeto.descricao;
+
+            // Preenche equipes (SEM BOTÃO DE EDITAR)
+            const equipesLista = document.getElementById('detalhe-equipes-lista');
+            equipesLista.innerHTML = ''; // Limpa
+
+            projeto.equipes.forEach(equipe => {
+                const equipeCard = `
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-xl font-bold text-superagil-blue">${equipe.nome}</h4>
+                            <!-- SEM BOTÃO DE EDITAR -->
+                        </div>
+                        <div class="flex flex-wrap gap-4">
+                            ${equipe.membros.map(membro => `
+                                <div class="flex items-center space-x-2">
+                                    <img src="https://placehold.co/40x40/eee/333?text=${membro[0]}" alt="${membro}" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <p class="font-medium text-gray-800">${membro}</p>
+                                        <p class="text-xs text-gray-500">Colaborador</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                equipesLista.innerHTML += equipeCard;
+            });
+        }
+    </script>
+
+</body>
+</html>

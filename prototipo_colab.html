@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperÁgil - App Colaborador</title>
+    <!-- Carrega o Tailwind CSS para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fonte Inter (padrão do Tailwind) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Classe auxiliar para esconder/mostrar telas */
+        .hidden {
+            display: none;
+        }
+        /* Cores personalizadas do SuperÁgil (baseado no logo) */
+        .bg-superagil-orange { background-color: #f97316; } /* orange-600 */
+        .text-superagil-orange { color: #f97316; }
+        .border-superagil-orange { border-color: #f97316; }
+        .bg-superagil-blue { background-color: #1e40af; } /* blue-800 */
+        .text-superagil-blue { color: #1e40af; }
+
+        /* Efeito de curva do login */
+        .login-bg-orange {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background-color: #f97316; /* Laranja */
+            z-index: 0;
+        }
+        .login-bg-blue {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #1e40af; /* Azul */
+            clip-path: ellipse(120% 60% at 50% 0%);
+            z-index: 1;
+        }
+        .login-content {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- 
+      ==================================================================
+      TELA DE LOGIN (View 1)
+      (Requisito 2.2)
+      ==================================================================
+    -->
+    <div id="login-view" class="relative min-h-screen overflow-hidden">
+        <!-- Fundos curvados -->
+        <div class="login-bg-orange"></div>
+        <div class="login-bg-blue"></div>
+        
+        <!-- Conteúdo do Login -->
+        <div class="login-content min-h-screen flex flex-col items-center justify-center p-4">
+            
+            <h1 class="text-6xl font-bold text-white mb-12">SuperÁgil</h1>
+
+            <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Login</h2>
+                
+                <form onsubmit="event.preventDefault(); login()">
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-600 mb-2">E-mail</label>
+                        <input type="email" id="email" value="colaborador@superagil.com" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-superagil-orange" placeholder="seuemail@gmail.com" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-600 mb-2">Senha</label>
+                        <input type="password" id="password" value="123456" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-superagil-orange" placeholder="**************" required>
+                    </div>
+
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <input id="remember" type="checkbox" class="h-4 w-4 text-superagil-orange rounded border-gray-300 focus:ring-superagil-orange">
+                            <label for="remember" class="ml-2 block text-sm text-gray-700">Salvar login</label>
+                        </div>
+                    </div>
+
+                    <!-- CAPTCHA Visual (Não-Funcional) -->
+                    <div class="bg-gray-100 border border-gray-300 rounded-lg p-3 flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <input type="checkbox" checked class="h-6 w-6 rounded border-gray-400">
+                            <span class="ml-3 text-sm text-gray-700">Eu não sou um robô</span>
+                        </div>
+                        <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" class="h-8">
+                    </div>
+
+                    <button type="submit" class="w-full bg-superagil-orange text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-opacity-90 transition-all duration-300">
+                        Entrar
+                    </button>
+                    
+                    <p class="text-center text-sm text-gray-600 mt-6">
+                        Ainda não tem uma conta? 
+                        <a href="#" class="font-medium text-superagil-orange hover:underline">Cadastre-se</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+      ==================================================================
+      APP COLABORADOR (View 2)
+      Container principal do app pós-login
+      ==================================================================
+    -->
+    <div id="app-view" class="hidden min-h-screen bg-gray-100">
+        
+        <!-- HEADER (Cabeçalho) -->
+        <header class="bg-superagil-blue text-white shadow-lg sticky top-0 z-50">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold">SuperÁgil</h1>
+                <nav class="flex items-center space-x-2">
+                    <!-- Botão Feedback (Req 2.4) -->
+                    <button onclick="showView('feedback')" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <span class="font-medium hidden md:block">Feedback</span>
+                        <!-- Ícone de Feedback (SVG Inline) -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                    </button>
+                    <!-- Botão Perfil (Req 2.3) -->
+                    <button onclick="showView('perfil')" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <span class="font-medium hidden md:block">Meu Perfil</span>
+                        <!-- Ícone de Perfil (SVG Inline) -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Área de Conteúdo Principal -->
+        <main id="main-content" class="container mx-auto p-4 md:p-8">
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: DASHBOARD DE EQUIPES (Tela 2a)
+              (Requisito 2.4)
+              ----------------------------------------------------
+            -->
+            <div id="dashboard-content" class="app-content">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Meus Projetos e Equipes</h2>
+                </div>
+
+                <!-- Lista de Projetos/Equipes -->
+                <div id="project-list" class="space-y-6">
+                    <!-- Projetos serão injetados aqui pelo JavaScript -->
+                </div>
+            </div>
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: EDITAR PERFIL / HABILIDADES (Tela 2b)
+              (Requisito 2.3)
+              ----------------------------------------------------
+            -->
+            <div id="perfil-content" class="app-content hidden">
+                 <button onclick="showView('dashboard')" class="text-superagil-orange font-medium mb-4 flex items-center space-x-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span>Voltar ao Dashboard</span>
+                </button>
+
+                <div class="bg-white p-8 rounded-2xl shadow-xl max-w-4xl mx-auto">
+                    <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                        <img src="https://placehold.co/150x150/f97316/white?text=C" alt="Foto do Perfil" class="w-36 h-36 rounded-full shadow-md border-4 border-white">
+                        <div class="flex-1 text-center md:text-left">
+                            <h2 class="text-3xl font-bold text-gray-800">Ana Silva</h2>
+                            <p class="text-lg text-superagil-orange">Frontend Developer</p>
+                            <p class="text-gray-600 mt-2">ana.silva@superagil.com | (11) 98888-7777</p>
+                            <button class="mt-4 text-sm bg-blue-100 text-blue-700 font-medium py-2 px-4 rounded-lg hover:bg-blue-200">
+                                Editar Informações
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr class="my-8">
+
+                    <!-- Seção de Experiência Scrum (Req 2.3) -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Experiência Scrum</h3>
+                        <div id="scrum-skills-list" class="flex flex-wrap gap-2 mb-4">
+                            <!-- Skills injetadas -->
+                        </div>
+                        <form onsubmit="event.preventDefault(); addSkill('scrum')" class="flex gap-4">
+                            <input type="text" id="new-scrum-skill" placeholder="Adicionar nova experiência (ex: PO, Scrum Master)" class="flex-1 p-3 border border-gray-300 rounded-lg">
+                            <button type="submit" class="bg-superagil-blue text-white font-medium py-3 px-5 rounded-lg hover:bg-opacity-90">Adicionar</button>
+                        </form>
+                    </div>
+
+                    <hr class="my-8">
+
+                    <!-- Seção de Habilidades Técnicas (Req 2.3) -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Habilidades Técnicas</h3>
+                        <div id="tech-skills-list" class="flex flex-wrap gap-2 mb-4">
+                           <!-- Skills injetadas -->
+                        </div>
+                         <form onsubmit="event.preventDefault(); addSkill('tech')" class="flex gap-4">
+                            <input type="text" id="new-tech-skill" placeholder="Adicionar nova habilidade (ex: React, Node.js)" class="flex-1 p-3 border border-gray-300 rounded-lg">
+                            <button type="submit" class="bg-superagil-blue text-white font-medium py-3 px-5 rounded-lg hover:bg-opacity-90">Adicionar</button>
+                        </form>
+                    </div>
+
+                    <hr class="my-8">
+
+                    <!-- Seção de Projetos -->
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Equipes que participo</h3>
+                        <ul class="space-y-2">
+                            <li class="text-gray-700">Equipe Alfa (Projeto Super Vendas)</li>
+                            <li class="text-gray-700">Equipe IA (Iniciativa Gen AI)</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-10 text-right">
+                        <button onclick="alert('Perfil Salvo! (simulação)')" class="bg-superagil-orange text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-opacity-90 transition-all">
+                            Salvar Alterações no Perfil
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: DETALHE DO PROJETO (Tela 2c)
+              (Visualização)
+              ----------------------------------------------------
+            -->
+            <div id="detalhe-projeto-content" class="app-content hidden">
+                <button onclick="showView('dashboard')" class="text-superagil-orange font-medium mb-4 flex items-center space-x-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span>Voltar ao Dashboard</span>
+                </button>
+
+                <!-- Cabeçalho do Projeto -->
+                <div class="bg-white p-6 rounded-2xl shadow-xl mb-8">
+                    <h2 id="detalhe-proj-nome" class="text-3xl font-bold text-gray-800"></h2>
+                    <p id="detalhe-proj-desc" class="text-gray-600 mt-2"></p>
+                </div>
+
+                <!-- Lista de Equipes -->
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Equipes do Projeto</h3>
+                <div id="detalhe-equipes-lista" class="space-y-6">
+                    <!-- Equipes serão injetadas aqui (sem botão de editar) -->
+                </div>
+            </div>
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: FEEDBACK (Tela 2d)
+              (Requisito 2.4)
+              ----------------------------------------------------
+            -->
+            <div id="feedback-content" class="app-content hidden">
+                 <button onclick="showView('dashboard')" class="text-superagil-orange font-medium mb-4 flex items-center space-x-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span>Voltar ao Dashboard</span>
+                </button>
+
+                <div class="bg-white p-8 rounded-2xl shadow-xl max-w-2xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8">Feedback de Melhorias</h2>
+                    <p class="text-gray-600 mb-6">Queremos saber sua opinião! Use este espaço para nos contar sobre sua experiência de uso e sugerir melhorias para o SuperÁgil.</p>
+                    <form onsubmit="event.preventDefault(); alert('Feedback enviado com sucesso! (simulação)')">
+                        <div>
+                            <label for="feedback-text" class="block text-sm font-medium text-gray-700 mb-2">Sua mensagem</label>
+                            <textarea id="feedback-text" rows="8" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-superagil-orange" placeholder="Descreva sua experiência ou sugestão..."></textarea>
+                        </div>
+                        <div class="mt-6 text-right">
+                            <button type="submit" class="bg-superagil-orange text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-opacity-90 transition-all">
+                                Enviar Feedback
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- 
+      ==================================================================
+      SCRIPT DE INTERATIVIDADE (JavaScript)
+      ==================================================================
+    -->
+    <script>
+        // Dados Mockados (Simulando um banco de dados)
+        const mockData = {
+            projetos: [
+                {
+                    id: 'xyz',
+                    nome: 'Projeto Super Vendas (XYZ)',
+                    descricao: 'Uma nova plataforma de vendas B2B para revolucionar o mercado.',
+                    minhaEquipe: { 
+                        nome: 'Equipe Alfa (Frontend)', 
+                        membros: ['Ana (Você)', 'Bruno', 'Carla', 'Daniel', 'Elias'] 
+                    },
+                    todasEquipes: [
+                        { 
+                            nome: 'Equipe Alfa (Frontend)', 
+                            membros: ['Ana', 'Bruno', 'Carla', 'Daniel', 'Elias'] 
+                        },
+                        { 
+                            nome: 'Equipe Beta (Backend)', 
+                            membros: ['Fernanda', 'Gustavo', 'Helena', 'Igor', 'Julia'] 
+                        },
+                    ]
+                },
+                {
+                    id: 'gen-ai',
+                    nome: 'Iniciativa Gen AI',
+                    descricao: 'Implementação de IA Generativa para atendimento ao cliente.',
+                    minhaEquipe: {
+                        nome: 'Equipe IA', 
+                        membros: ['Leo', 'Maria', 'Nilce', 'Otavio', 'Ana (Você)']
+                    },
+                    todasEquipes: [
+                        { 
+                            nome: 'Equipe IA', 
+                            membros: ['Leo', 'Maria', 'Nilce', 'Otavio', 'Ana'] 
+                        }
+                    ]
+                }
+            ],
+            perfil: {
+                nome: 'Ana Silva',
+                email: 'ana.silva@superagil.com',
+                funcao: 'Frontend Developer',
+                scrumSkills: [
+                    { nome: 'Scrum (Geral)', principal: true },
+                    { nome: 'Daily/Review/Retro', principal: false },
+                ],
+                techSkills: [
+                    { nome: 'React', principal: true },
+                    { nome: 'JavaScript', principal: false },
+                    { nome: 'HTML5/CSS3', principal: false },
+                ]
+            }
+        };
+
+        // Função de Login
+        function login() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('app-view').classList.remove('hidden');
+            showView('dashboard');
+        }
+
+        // Função central de navegação
+        function showView(viewId, data = null) {
+            // Esconde todas as "telas" de conteúdo
+            document.querySelectorAll('.app-content').forEach(el => el.classList.add('hidden'));
+
+            // Mostra a tela solicitada
+            const viewElement = document.getElementById(`${viewId}-content`);
+            if (viewElement) {
+                viewElement.classList.remove('hidden');
+            } else {
+                console.error(`View "${viewId}-content" não encontrada!`);
+                document.getElementById('dashboard-content').classList.remove('hidden'); // Volta pro dashboard
+            }
+
+            // Scroll para o topo
+            window.scrollTo(0, 0);
+
+            // Se for uma view que precisa de dados, renderiza
+            if (viewId === 'dashboard') {
+                renderCollabDashboard();
+            }
+            if (viewId === 'detalhe-projeto' && data) {
+                renderDetalheProjetoCollab(data);
+            }
+            if (viewId === 'perfil') {
+                renderPerfil();
+            }
+        }
+
+        // Renderiza o Dashboard do Colaborador (Requisito 2.4)
+        function renderCollabDashboard() {
+            const projectList = document.getElementById('project-list');
+            projectList.innerHTML = ''; // Limpa a lista
+
+            mockData.projetos.forEach(proj => {
+                const card = `
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center">
+                            <div>
+                                <h3 class="text-xl font-bold text-superagil-blue">${proj.nome}</h3>
+                                <p class="text-gray-600 text-sm mb-4 md:mb-0">${proj.descricao.substring(0, 70)}...</p>
+                            </div>
+                            <button onclick="showView('detalhe-projeto', '${proj.id}')" class="w-full md:w-auto mt-2 md:mt-0 bg-white border border-superagil-orange text-superagil-orange font-bold py-2 px-4 rounded-lg hover:bg-superagil-orange hover:text-white transition-all">
+                                Ver Detalhes do Projeto
+                            </button>
+                        </div>
+                        
+                        <hr class="my-4">
+
+                        <div>
+                            <h4 class="text-md font-bold text-gray-700 mb-3">Minha Equipe: ${proj.minhaEquipe.nome}</h4>
+                            <div class="flex flex-wrap gap-4">
+                                ${proj.minhaEquipe.membros.map(membro => `
+                                    <div class="flex items-center space-x-2">
+                                        <img src="https://placehold.co/40x40/eee/333?text=${membro[0]}" alt="${membro}" class="w-10 h-10 rounded-full">
+                                        <div>
+                                            <p class="font-medium text-gray-800">${membro}</p>
+                                            <p class="text-xs text-gray-500">${membro.includes('Você') ? 'Seu Perfil' : 'Colaborador'}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                projectList.innerHTML += card;
+            });
+        }
+
+        // Renderiza o Detalhe do Projeto (Visão Colaborador)
+        function renderDetalheProjetoCollab(projectId) {
+            const projeto = mockData.projetos.find(p => p.id === projectId);
+            if (!projeto) {
+                alert('Projeto não encontrado!');
+                showView('dashboard');
+                return;
+            }
+
+            // Preenche cabeçalho
+            document.getElementById('detalhe-proj-nome').textContent = projeto.nome;
+            document.getElementById('detalhe-proj-desc').textContent = projeto.descricao;
+
+            // Preenche equipes
+            const equipesLista = document.getElementById('detalhe-equipes-lista');
+            equipesLista.innerHTML = ''; // Limpa
+
+            projeto.todasEquipes.forEach(equipe => {
+                const equipeCard = `
+                    <div class="bg-white p-6 rounded-2xl shadow-lg">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-xl font-bold text-superagil-blue">${equipe.nome}</h4>
+                            <!-- SEM BOTÃO DE EDITAR PARA COLABORADOR -->
+                        </div>
+                        <div class="flex flex-wrap gap-4">
+                            ${equipe.membros.map(membro => `
+                                <div class="flex items-center space-x-2">
+                                    <img src="https://placehold.co/40x40/eee/333?text=${membro[0]}" alt="${membro}" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <p class="font-medium text-gray-800">${membro}</p>
+                                        <p class="text-xs text-gray-500">Colaborador</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                equipesLista.innerHTML += equipeCard;
+            });
+        }
+
+        // Renderiza o Perfil Editável (Req 2.3)
+        function renderPerfil() {
+            // Renderiza Habilidades Scrum
+            const scrumList = document.getElementById('scrum-skills-list');
+            scrumList.innerHTML = '';
+            mockData.perfil.scrumSkills.forEach(skill => {
+                scrumList.innerHTML += `
+                    <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1.5 rounded-full flex items-center">
+                        ${skill.nome}
+                        ${skill.principal ? '<span class="ml-2 text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Principal</span>' : ''}
+                        <button class="ml-2 text-blue-600 hover:text-blue-800">&times;</button>
+                    </span>
+                `;
+            });
+
+            // Renderiza Habilidades Técnicas
+            const techList = document.getElementById('tech-skills-list');
+            techList.innerHTML = '';
+            mockData.perfil.techSkills.forEach(skill => {
+                techList.innerHTML += `
+                    <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1.5 rounded-full flex items-center">
+                        ${skill.nome}
+                        ${skill.principal ? '<span class="ml-2 text-xs bg-gray-600 text-white px-2 py-0.5 rounded-full">Principal</span>' : ''}
+                        <button class="ml-2 text-gray-600 hover:text-gray-800">&times;</button>
+                    </span>
+                `;
+            });
+        }
+
+        // Adiciona uma nova skill (simulação)
+        function addSkill(type) {
+            if (type === 'scrum') {
+                const input = document.getElementById('new-scrum-skill');
+                if (input.value) {
+                    mockData.perfil.scrumSkills.push({ nome: input.value, principal: false });
+                    input.value = '';
+                    renderPerfil(); // Re-renderiza a lista
+                }
+            } else if (type === 'tech') {
+                const input = document.getElementById('new-tech-skill');
+                 if (input.value) {
+                    mockData.perfil.techSkills.push({ nome: input.value, principal: false });
+                    input.value = '';
+                    renderPerfil(); // Re-renderiza a lista
+                }
+            }
+        }
+
+    </script>
+
+</body>
+</html>
