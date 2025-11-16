@@ -121,7 +121,8 @@
         <!-- HEADER (Cabeçalho) -->
         <header class="bg-superagil-blue text-white shadow-lg sticky top-0 z-50">
             <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-                <h1 class="text-2xl font-bold">SuperÁgil</h1>
+                <!-- ID ADICIONADO (SEMANA 5) -->
+                <h1 id="header-title" class="text-2xl font-bold">SuperÁgil</h1>
                 <nav class="flex items-center space-x-2">
                     <!-- Botão Feedback (Req 2.4) -->
                     <button onclick="showView('feedback')" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-blue-700 transition-colors">
@@ -151,6 +152,11 @@
             <div id="dashboard-content" class="app-content">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6">
                     <h2 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Meus Projetos e Equipes</h2>
+                    <!-- BOTÃO NOVO (SEMANA 5) -->
+                    <button onclick="toggleModal(true)" class="bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-gray-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.573-1.066z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span>Personalizar Dashboard</span>
+                    </button>
                 </div>
 
                 <!-- Lista de Projetos/Equipes -->
@@ -290,6 +296,59 @@
 
     <!-- 
       ==================================================================
+      MODAL DE PERSONALIZAÇÃO (NOVO - SEMANA 5)
+      (Requisito 2.4 - Semana 5)
+      ==================================================================
+    -->
+    <div id="personalizar-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
+            <!-- Header do Modal -->
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-xl font-bold text-gray-800">Personalizar Dashboard</h3>
+                <button onclick="toggleModal(false)" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Conteúdo do Modal -->
+            <div class="p-6 space-y-6">
+                <!-- Opção de Cor do Tema -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cor do Tema (Simulação)</label>
+                    <div class="flex space-x-3">
+                        <button onclick="changeTheme('blue')" class="w-10 h-10 rounded-full bg-superagil-blue border-2 border-superagil-blue ring-2 ring-offset-1 ring-superagil-blue"></button>
+                        <button onclick="changeTheme('orange')" class="w-10 h-10 rounded-full bg-superagil-orange border-2 border-superagil-orange"></button>
+                        <button onclick="changeTheme('green')" class="w-10 h-10 rounded-full bg-green-600 border-2 border-green-600"></button>
+                        <button onclick="changeTheme('indigo')" class="w-10 h-10 rounded-full bg-indigo-700 border-2 border-indigo-700"></button>
+                    </div>
+                </div>
+
+                <!-- Opção de Layout -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Layout (Simulação)</label>
+                    <p class="text-gray-600">Simulação de reordenação (drag-and-drop) dos widgets do dashboard.</p>
+                    <div class="mt-2 p-4 bg-gray-100 rounded-lg border-dashed border-2 border-gray-300">
+                        <div class="p-3 bg-white shadow rounded mb-2">Widget 1: Meus Projetos</div>
+                        <div class="p-3 bg-white shadow rounded mb-2">Widget 2: Minhas Tarefas</div>
+                        <p class="text-center text-xs text-gray-500">Arraste para reordenar</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer do Modal -->
+            <div class="p-6 bg-gray-50 rounded-b-2xl text-right">
+                <button onclick="toggleModal(false)" class="bg-gray-200 text-gray-700 font-medium py-2 px-5 rounded-lg mr-2 hover:bg-gray-300">
+                    Cancelar
+                </button>
+                <button onclick="alert('Preferências salvas! (simulação)'); toggleModal(false);" class="bg-superagil-orange text-white font-bold py-2 px-5 rounded-lg hover:bg-opacity-90">
+                    Salvar Preferências
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+      ==================================================================
       SCRIPT DE INTERATIVIDADE (JavaScript)
       ==================================================================
     -->
@@ -407,15 +466,22 @@
                         <div>
                             <h4 class="text-md font-bold text-gray-700 mb-3">Minha Equipe: ${proj.minhaEquipe.nome}</h4>
                             <div class="flex flex-wrap gap-4">
-                                ${proj.minhaEquipe.membros.map(membro => `
+                                ${proj.minhaEquipe.membros.map(membro => {
+                                    // LÓGICA ATUALIZADA (SEMANA 5)
+                                    const isSelf = membro.includes('Você') || membro.includes('Ana');
+                                    const placeholdText = isSelf ? 'A' : membro[0];
+                                    const placeholdColor = isSelf ? 'f97316/white' : 'eee/333';
+                                    const funcao = isSelf ? mockData.perfil.funcao : 'Colaborador';
+                                    return `
                                     <div class="flex items-center space-x-2">
-                                        <img src="https://placehold.co/40x40/eee/333?text=${membro[0]}" alt="${membro}" class="w-10 h-10 rounded-full">
+                                        <img src="https://placehold.co/40x40/${placeholdColor}?text=${placeholdText}" alt="${membro}" class="w-10 h-10 rounded-full">
                                         <div>
                                             <p class="font-medium text-gray-800">${membro}</p>
-                                            <p class="text-xs text-gray-500">${membro.includes('Você') ? 'Seu Perfil' : 'Colaborador'}</p>
+                                            <p class="text-xs ${isSelf ? 'text-superagil-orange' : 'text-gray-500'}">${funcao}</p>
                                         </div>
                                     </div>
-                                `).join('')}
+                                    `;
+                                }).join('')}
                             </div>
                         </div>
                     </div>
@@ -425,6 +491,7 @@
         }
 
         // Renderiza o Detalhe do Projeto (Visão Colaborador)
+        // ESTA FUNÇÃO FOI COMPLETAMENTE ATUALIZADA
         function renderDetalheProjetoCollab(projectId) {
             const projeto = mockData.projetos.find(p => p.id === projectId);
             if (!projeto) {
@@ -446,18 +513,29 @@
                     <div class="bg-white p-6 rounded-2xl shadow-lg">
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="text-xl font-bold text-superagil-blue">${equipe.nome}</h4>
-                            <!-- SEM BOTÃO DE EDITAR PARA COLABORADOR -->
                         </div>
                         <div class="flex flex-wrap gap-4">
-                            ${equipe.membros.map(membro => `
-                                <div class="flex items-center space-x-2">
-                                    <img src="https://placehold.co/40x40/eee/333?text=${membro[0]}" alt="${membro}" class="w-10 h-10 rounded-full">
+                            ${equipe.membros.map(membro => {
+                                // LÓGICA ATUALIZADA (SEMANA 5) - Esta é a mudança principal
+                                const isSelf = membro.includes('Você') || membro.includes('Ana');
+                                const bgColor = isSelf ? 'bg-orange-100 border border-superagil-orange' : 'bg-transparent';
+                                const placeholdText = isSelf ? 'A' : membro[0];
+                                const placeholdColor = isSelf ? 'f97316/white' : 'eee/333';
+                                const funcao = isSelf ? mockData.perfil.funcao : 'Colaborador';
+                                // Pega as 2 primeiras habilidades para o card
+                                const skills = isSelf ? mockData.perfil.techSkills.map(s => s.nome).slice(0, 2).join(', ') + '...' : 'Habilidades Padrão';
+
+                                return `
+                                <div class="flex items-center space-x-2 p-3 rounded-lg ${bgColor} min-w-[180px]">
+                                    <img src="https://placehold.co/40x40/${placeholdColor}?text=${placeholdText}" alt="${membro}" class="w-10 h-10 rounded-full">
                                     <div>
                                         <p class="font-medium text-gray-800">${membro}</p>
-                                        <p class="text-xs text-gray-500">Colaborador</p>
+                                        <p class="text-xs ${isSelf ? 'text-superagil-orange font-bold' : 'text-gray-500'}">${funcao}</p>
+                                        ${isSelf ? `<p class="text-xs text-gray-500 mt-1">${skills}</p>` : ''}
                                     </div>
                                 </div>
-                            `).join('')}
+                                `;
+                            }).join('')}
                         </div>
                     </div>
                 `;
@@ -475,7 +553,7 @@
                     <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1.5 rounded-full flex items-center">
                         ${skill.nome}
                         ${skill.principal ? '<span class="ml-2 text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Principal</span>' : ''}
-                        <button class="ml-2 text-blue-600 hover:text-blue-800">&times;</button>
+                        <button class="ml-2 text-blue-600 hover:text-blue-800" onclick="removeSkill('scrum', '${skill.nome}')">&times;</button>
                     </span>
                 `;
             });
@@ -488,7 +566,7 @@
                     <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1.5 rounded-full flex items-center">
                         ${skill.nome}
                         ${skill.principal ? '<span class="ml-2 text-xs bg-gray-600 text-white px-2 py-0.5 rounded-full">Principal</span>' : ''}
-                        <button class="ml-2 text-gray-600 hover:text-gray-800">&times;</button>
+                        <button class="ml-2 text-gray-600 hover:text-gray-800" onclick="removeSkill('tech', '${skill.nome}')">&times;</button>
                     </span>
                 `;
             });
@@ -511,6 +589,75 @@
                     renderPerfil(); // Re-renderiza a lista
                 }
             }
+        }
+
+        // NOVA FUNÇÃO - Remove uma skill (simulação)
+        function removeSkill(type, skillName) {
+            if (type === 'scrum') {
+                mockData.perfil.scrumSkills = mockData.perfil.scrumSkills.filter(skill => skill.nome !== skillName);
+            } else if (type === 'tech') {
+                mockData.perfil.techSkills = mockData.perfil.techSkills.filter(skill => skill.nome !== skillName);
+            }
+            renderPerfil(); // Re-renderiza a lista
+        }
+
+        // 
+        // =============================================================
+        // FUNÇÕES DE PERSONALIZAÇÃO (NOVAS - SEMANA 5)
+        // =============================================================
+        // 
+
+        // Mostra ou esconde o modal de personalização
+        function toggleModal(show) {
+            const modal = document.getElementById('personalizar-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Simula a mudança de tema
+        function changeTheme(color) {
+            // Remove anel de seleção de todos
+            document.querySelectorAll('#personalizar-modal button[onclick^="changeTheme"]').forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-offset-1');
+                if (btn.classList.contains('bg-superagil-blue')) {
+                     btn.classList.remove('ring-superagil-blue');
+                }
+            });
+
+            // Adiciona anel no botão clicado
+            const clickedButton = document.querySelector(`#personalizar-modal button[onclick="changeTheme('${color}')"]`);
+            if(clickedButton) {
+                clickedButton.classList.add('ring-2', 'ring-offset-1');
+                 if (color === 'blue') {
+                     clickedButton.classList.add('ring-superagil-blue');
+                 }
+            }
+
+
+            // Simula a mudança da cor do header
+            const header = document.querySelector('header');
+            const headerTitle = document.getElementById('header-title');
+
+            header.classList.remove('bg-superagil-blue', 'bg-superagil-orange', 'bg-green-600', 'bg-indigo-700');
+            
+            let newColorClass;
+            if (color === 'blue') {
+                newColorClass = 'bg-superagil-blue';
+                headerTitle.textContent = "SuperÁgil (Azul)";
+            } else if (color === 'orange') {
+                newColorClass = 'bg-superagil-orange';
+                headerTitle.textContent = "SuperÁgil (Laranja)";
+            } else if (color === 'green') {
+                newColorClass = 'bg-green-600';
+                headerTitle.textContent = "SuperÁgil (Verde)";
+            } else if (color === 'indigo') {
+                newColorClass = 'bg-indigo-700';
+                headerTitle.textContent = "SuperÁgil (Índigo)";
+            }
+            header.classList.add(newColorClass);
         }
 
     </script>

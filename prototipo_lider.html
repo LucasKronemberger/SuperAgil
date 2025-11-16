@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v7 (com Dashboards Analíticos funcionais) -->
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -6,6 +7,8 @@
     <title>SuperÁgil - App Liderança</title>
     <!-- Carrega o Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- NOVO: Carrega o Chart.js para os gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Fonte Inter (padrão do Tailwind) */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -122,7 +125,12 @@
             <div class="container mx-auto px-4 py-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold">SuperÁgil</h1>
                 <nav class="flex items-center space-x-2">
-                    <!-- BOTÃO GERENCIAR PO (NOVO) -->
+                    <!-- BOTÃO (SEMANA 5) -->
+                    <button onclick="showView('dashboards-analiticos')" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6m-6 0H9m12 0h2a2 2 0 002-2V9a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
+                        <span class="font-medium hidden md:block">Dashboards</span>
+                    </button>
+                    <!-- BOTÃO GERENCIAR PO -->
                     <button onclick="showView('gerenciar-po')" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-blue-700 transition-colors">
                         <span class="font-medium hidden md:block">Gerenciar POs</span>
                         <!-- Ícone de Gerenciar Usuários (SVG Inline) -->
@@ -246,7 +254,7 @@
 
             <!-- 
               ----------------------------------------------------
-              CONTEÚDO: EDITAR EQUIPE (Tela 2d - NOVA)
+              CONTEÚDO: EDITAR EQUIPE (Tela 2d)
               (Requisito 1.5)
               ----------------------------------------------------
             -->
@@ -408,6 +416,171 @@
                 </div>
             </div>
 
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: DASHBOARDS ANALÍTICOS (Tela 2g - MENU - SEMANA 5)
+              (Requisito 1.4 - Semana 5)
+              ----------------------------------------------------
+            -->
+            <div id="dashboards-analiticos-content" class="app-content hidden">
+                 <button onclick="showView('dashboard')" class="text-superagil-orange font-medium mb-4 flex items-center space-x-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span>Voltar ao Dashboard Principal</span>
+                </button>
+
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800">Dashboards Analíticos</h2>
+                    <p class="text-gray-600 mt-2">Visualize dados consolidados sobre competências, alocação e progresso dos projetos.</p>
+                </div>
+
+                <!-- Grelha de Dashboards (AGORA CLICÁVEL) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- Cartão: Visão de Competências -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onclick="showView('dashboard-competencias')">
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-blue-100 text-superagil-blue p-3 rounded-full">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2M5 3a2 2 0 00-2 2v1c0 1.1.9 2 2 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 14h14a2 2 0 012 2v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1a2 2 0 012-2z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Visão de Competências</h3>
+                                <p class="text-gray-600 text-sm">Competências mais comuns e mais raras na empresa.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cartão: Alocação de Recursos -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onclick="showView('dashboard-alocacao')">
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-orange-100 text-superagil-orange p-3 rounded-full">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-2.356M17 20v-2m0 2H5a2 2 0 01-2-2v-5a2 2 0 012-2h14a2 2 0 012 2v5a2 2 0 01-2 2h-5m-4-3a3 3 0 100-6 3 3 0 000 6z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Alocação de Recursos</h3>
+                                <p class="text-gray-600 text-sm">Quem está disponível vs. quem está alocado.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cartão: Progresso dos Projetos -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer" onclick="showView('dashboard-progresso')">
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-green-100 text-green-700 p-3 rounded-full">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Progresso dos Projetos</h3>
+                                <p class="text-gray-600 text-sm">Visão macro do avanço das equipas.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 
+              ======================================================
+              NOVAS TELAS DE DASHBOARD ESPECÍFICO (SEMANA 5)
+              ======================================================
+            -->
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: DASHBOARD - VISÃO DE COMPETÊNCIAS (Tela 2h)
+              ----------------------------------------------------
+            -->
+            <div id="dashboard-competencias-content" class="app-content hidden">
+                <button onclick="showView('dashboards-analiticos')" class="text-superagil-orange font-medium mb-4 flex items-center space-x-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span>Voltar para Dashboards Analíticos</span>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Visão de Competências</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Gráfico de Barras -->
+                    <div class="bg-white p-6 rounded-2xl shadow-xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Top Habilidades Técnicas</h3>
+                        <canvas id="competenciasChart"></canvas>
+                    </div>
+                    <!-- Lista de Habilidades Raras -->
+                    <div class="bg-white p-6 rounded-2xl shadow-xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Habilidades Raras (Menos de 3 pessoas)</h3>
+                        <ul class="space-y-2">
+                            <li class="text-gray-700 p-3 bg-gray-50 rounded-lg">Go (Linguagem)</li>
+                            <li class="text-gray-700 p-3 bg-gray-50 rounded-lg">Swift (iOS)</li>
+                            <li class="text-gray-700 p-3 bg-gray-50 rounded-lg">Flutter</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: DASHBOARD - ALOCAÇÃO DE RECURSOS (Tela 2i)
+              ----------------------------------------------------
+            -->
+            <div id="dashboard-alocacao-content" class="app-content hidden">
+                <button onclick="showView('dashboards-analiticos')" class="text-superagil-orange font-medium mb-4 flex items-center space-x-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span>Voltar para Dashboards Analíticos</span>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Alocação de Recursos</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Gráfico de Pizza -->
+                    <div class="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Colaboradores (Alocados vs. Disponíveis)</h3>
+                        <div class="w-full max-w-xs">
+                            <canvas id="alocacaoChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Lista de Disponíveis -->
+                    <div class="bg-white p-6 rounded-2xl shadow-xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Colaboradores Disponíveis</h3>
+                        <div id="lista-disponiveis-dash" class="space-y-3">
+                            <!-- Lista será injetada pelo JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+              ----------------------------------------------------
+              CONTEÚDO: DASHBOARD - PROGRESSO DOS PROJETOS (Tela 2j)
+              ----------------------------------------------------
+            -->
+            <div id="dashboard-progresso-content" class="app-content hidden">
+                <button onclick="showView('dashboards-analiticos')" class="text-superagil-orange font-medium mb-4 flex items-center space-x-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span>Voltar para Dashboards Analíticos</span>
+                </button>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Progresso dos Projetos</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Gráfico de Linha -->
+                    <div class="bg-white p-6 rounded-2xl shadow-xl lg:col-span-2">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Progresso Médio (Sprints)</h3>
+                        <canvas id="progressoChart"></canvas>
+                    </div>
+                    <!-- KPIs de Projetos -->
+                    <div class="bg-white p-6 rounded-2xl shadow-xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Projeto Super Vendas (XYZ)</h3>
+                        <p class="text-gray-600">Progresso: <span class="font-bold text-blue-600">75%</span></p>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Iniciativa Gen AI</h3>
+                        <p class="text-gray-600">Progresso: <span class="font-bold text-green-600">40%</span></p>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                            <div class="bg-green-600 h-2.5 rounded-full" style="width: 40%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </main>
     </div>
 
@@ -420,6 +593,11 @@
         // Variavel global para guardar o ID do projeto atual (para navegação de volta)
         let currentProjectId = null;
         let currentEditingTeam = null; // Guarda { projId, equipeNome }
+
+        // Variáveis globais para guardar as instâncias dos gráficos (para destruí-los)
+        window.competenciasChartInstance = null;
+        window.alocacaoChartInstance = null;
+        window.progressoChartInstance = null;
 
         // Dados Mockados (Simulando um banco de dados)
         const mockData = {
@@ -530,14 +708,27 @@
                 renderDetalheProjeto(data);
             }
             if (viewId === 'perfil') {
-                // AGORA CHAMA A FUNÇÃO
                 renderPerfil();
             }
-            // NOVO RENDER
             if (viewId === 'gerenciar-po') {
                 renderGerenciarPO();
             }
-            // NOVO RENDER (EDITAR EQUIPE)
+            
+            // --- NOVAS ROTAS (SEMANA 5) ---
+            if (viewId === 'dashboards-analiticos') {
+                // Não precisa de render, é um menu
+            }
+            if (viewId === 'dashboard-competencias') {
+                renderDashboardCompetencias();
+            }
+            if (viewId === 'dashboard-alocacao') {
+                renderDashboardAlocacao();
+            }
+            if (viewId === 'dashboard-progresso') {
+                renderDashboardProgresso();
+            }
+            // --- FIM NOVAS ROTAS ---
+
             if (viewId === 'editar-equipe' && data) {
                 currentEditingTeam = data; // Salva os dados da equipe sendo editada
                 renderEditarEquipe(data);
@@ -626,7 +817,7 @@
             });
         }
 
-        // NOVA FUNÇÃO - Renderiza a tela de Editar Equipe
+        // Renderiza a tela de Editar Equipe
         function renderEditarEquipe(data) { // data = { projId, equipeNome }
             const { projId, equipeNome } = data;
             const projeto = mockData.projetos.find(p => p.id === projId);
@@ -674,11 +865,11 @@
                 `;
             });
              if (disponiveis.length === 0) {
-                availableList.innerHTML = '<p class="text-gray-500 text-center">Nenhum colaborador disponível.</p>';
+                 availableList.innerHTML = '<p class="text-gray-500 text-center">Nenhum colaborador disponível.</p>';
             }
         }
 
-        // NOVA FUNÇÃO - Simula Adicionar Membro
+        // Simula Adicionar Membro
         function adicionarMembro(membroId) {
             const { projId, equipeNome } = currentEditingTeam;
             // Acha o colaborador
@@ -697,7 +888,7 @@
             renderEditarEquipe(currentEditingTeam);
         }
 
-        // NOVA FUNÇÃO - Simula Remover Membro
+        // Simula Remover Membro
         function removerMembro(membroId) {
             const { projId, equipeNome } = currentEditingTeam;
             // Acha o colaborador
@@ -717,7 +908,7 @@
         }
 
 
-        // NOVA FUNÇÃO - Renderiza a tela de Gerenciar PO
+        // Renderiza a tela de Gerenciar PO
         function renderGerenciarPO() {
             // Popula o <select> de projetos
             const projectSelect = document.getElementById('po-projeto');
@@ -764,7 +955,7 @@
                     <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1.5 rounded-full flex items-center">
                         ${skill.nome}
                         ${skill.principal ? '<span class="ml-2 text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Principal</span>' : ''}
-                        <button class="ml-2 text-blue-600 hover:text-blue-800">&times;</button>
+                        <button class="ml-2 text-blue-600 hover:text-blue-800" onclick="removeSkill('scrum', '${skill.nome}')">&times;</button>
                     </span>
                 `;
             });
@@ -777,7 +968,7 @@
                     <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1.5 rounded-full flex items-center">
                         ${skill.nome}
                         ${skill.principal ? '<span class="ml-2 text-xs bg-gray-600 text-white px-2 py-0.5 rounded-full">Principal</span>' : ''}
-                        <button class="ml-2 text-gray-600 hover:text-gray-800">&times;</button>
+                        <button class="ml-2 text-gray-600 hover:text-gray-800" onclick="removeSkill('tech', '${skill.nome}')">&times;</button>
                     </span>
                 `;
             });
@@ -800,6 +991,152 @@
                     renderPerfil(); // Re-renderiza a lista
                 }
             }
+        }
+
+        // NOVA FUNÇÃO - Remove uma skill (simulação)
+        function removeSkill(type, skillName) {
+            if (type === 'scrum') {
+                mockData.perfil.scrumSkills = mockData.perfil.scrumSkills.filter(skill => skill.nome !== skillName);
+            } else if (type === 'tech') {
+                mockData.perfil.techSkills = mockData.perfil.techSkills.filter(skill => skill.nome !== skillName);
+            }
+            renderPerfil(); // Re-renderiza a lista
+        }
+
+        // 
+        // =============================================================
+        // NOVAS FUNÇÕES DE DASHBOARD (SEMANA 5)
+        // =============================================================
+        // 
+
+        function renderDashboardCompetencias() {
+            const ctx = document.getElementById('competenciasChart').getContext('2d');
+            // Destrói gráfico anterior, se existir
+            if (window.competenciasChartInstance) {
+                window.competenciasChartInstance.destroy();
+            }
+            // Cria o novo gráfico
+            window.competenciasChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['JavaScript', 'React', 'Python', 'Node.js', 'UX Design', 'DevOps'],
+                    datasets: [{
+                        label: 'Nº de Colaboradores',
+                        data: [12, 9, 8, 8, 7, 4],
+                        backgroundColor: 'rgba(30, 64, 175, 0.7)', // bg-superagil-blue
+                        borderColor: 'rgba(30, 64, 175, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderDashboardAlocacao() {
+            const ctx = document.getElementById('alocacaoChart').getContext('2d');
+            // Destrói gráfico anterior, se existir
+            if (window.alocacaoChartInstance) {
+                window.alocacaoChartInstance.destroy();
+            }
+
+            // Calcula dados
+            const alocados = mockData.colaboradores.filter(c => c.emEquipe).length;
+            const disponiveis = mockData.colaboradores.filter(c => !c.emEquipe).length;
+
+            // Cria o novo gráfico
+            window.alocacaoChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Alocados', 'Disponíveis'],
+                    datasets: [{
+                        data: [alocados, disponiveis],
+                        backgroundColor: [
+                            'rgba(30, 64, 175, 0.7)', // bg-superagil-blue
+                            'rgba(249, 115, 22, 0.7)' // bg-superagil-orange
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+
+            // Popula a lista de disponíveis
+            const listaDiv = document.getElementById('lista-disponiveis-dash');
+            listaDiv.innerHTML = '';
+            const disponiveisList = mockData.colaboradores.filter(c => !c.emEquipe);
+            if(disponiveisList.length > 0) {
+                 disponiveisList.forEach(membro => {
+                    listaDiv.innerHTML += `
+                        <div class="border rounded-lg p-3 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-gray-800">${membro.nome}</p>
+                                <p class="text-sm text-gray-600">${membro.funcao}</p>
+                            </div>
+                            <span class="text-xs text-green-600 font-medium">Disponível</span>
+                        </div>
+                    `;
+                 });
+            } else {
+                listaDiv.innerHTML = '<p class="text-gray-500 text-center">Nenhum colaborador disponível.</p>';
+            }
+        }
+
+        function renderDashboardProgresso() {
+            const ctx = document.getElementById('progressoChart').getContext('2d');
+            // Destrói gráfico anterior, se existir
+            if (window.progressoChartInstance) {
+                window.progressoChartInstance.destroy();
+            }
+            // Cria o novo gráfico
+            window.progressoChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Sprint 1', 'Sprint 2', 'Sprint 3', 'Sprint 4', 'Sprint 5'],
+                    datasets: [{
+                        label: 'Progresso do Projeto XYZ',
+                        data: [10, 20, 45, 60, 75],
+                        borderColor: 'rgba(30, 64, 175, 1)', // bg-superagil-blue
+                        backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Progresso do Projeto Gen AI',
+                        data: [5, 15, 20, 30, 40],
+                        borderColor: 'rgba(249, 115, 22, 1)', // bg-superagil-orange
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
 
     </script>
